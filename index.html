@@ -53,20 +53,11 @@
   </div>
 
   <script>
-    let dataSiswa = [];
-
-    // Muat CSV saat halaman terbuka
-    window.onload = function() {
-      fetch('data.csv')
-        .then(response => response.text())
-        .then(csv => {
-          const rows = csv.trim().split('\n').slice(1); // Hilangkan header
-          dataSiswa = rows.map(row => {
-            const [nomor, nisn, tanggal_lahir, nama, status] = row.split(',');
-            return { nisn, tanggal_lahir, nama, status };
-          });
-        });
-    };
+    // Data siswa langsung ditulis di dalam JavaScript
+    const dataSiswa = [
+      { nisn: "20317525", tanggal_lahir: "2002-29-12", nama: "Dinda Aulia", status: "Lulus" },
+      // Tambahkan baris lainnya di sini
+    ];
 
     document.getElementById('checkForm').addEventListener('submit', function(e) {
       e.preventDefault();
