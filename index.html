@@ -64,7 +64,11 @@
       const dob = document.getElementById('dob').value.trim();
       const resultArea = document.getElementById('resultArea');
 
-      const siswa = dataSiswa.find(s =>
+      console.log("Input NISN:", nisn);
+console.log("Input Tanggal Lahir:", dob);
+console.log("Data Siswa:", dataSiswa);
+
+const siswa = dataSiswa.find(s =>
         s.nisn === nisn &&
         new Date(s.tanggal_lahir).toISOString().split('T')[0] === dob
       );
