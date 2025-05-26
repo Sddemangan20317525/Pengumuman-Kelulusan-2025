@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pengumuman Kelulusan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 30px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    img.logo {
+      max-width: 100px;
+    }
+    input, button {
+      padding: 10px;
+      width: 90%;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .success {
+      color: green;
+    }
+    .fail {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Logo Sekolah" class="logo">
+    <h2>Pengumuman Kelulusan</h2>
+    <form id="checkForm">
+      <input type="text" id="nisn" placeholder="Masukkan NISN" required><br>
+      <input type="date" id="dob" required><br>
+      <button type="submit">Cek Kelulusan</button>
+    </form>
+    <div class="result" id="resultArea"></div>
+  </div>
+
+  <script>
+    let dataSiswa = [];
+
+    // Muat CSV saat halaman terbuka
+    window.onload = function() {
+      fetch('data.csv')
+        .then(response => response.text())
+        .then(csv => {
+          const rows = csv.trim().split('\n').slice(1); // Hilangkan header
+          dataSiswa = rows.map(row => {
+            const [nomor, nisn, tanggal_lahir, nama, status] = row.split(',');
+            return { nisn, tanggal_lahir, nama, status };
+          });
+        });
+    };
+
+    document.getElementById('checkForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nisn = document.getElementById('nisn').value.trim();
+      const dob = document.getElementById('dob').value.trim();
+      const resultArea = document.getElementById('resultArea');
+
+      const siswa = dataSiswa.find(s => s.nisn === nisn && s.tanggal_lahir === dob);
+
+      if (siswa) {
+        const statusClass = siswa.status.toLowerCase().includes("lulus") ? "success" : "fail";
+        resultArea.innerHTML = `<div>Nama: <strong>${siswa.nama}</strong></div>
+                                <div class="${statusClass}">Selamat, Anda ${siswa.status}!</div>`;
+      } else {
+        resultArea.innerHTML = `<div class="fail">Data tidak ditemukan. Periksa kembali NISN dan Tanggal Lahir Anda.</div>`;
+      }
+    });
+  </script>
+</body>
+</html>
